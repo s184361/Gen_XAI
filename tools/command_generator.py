@@ -1,3 +1,5 @@
+from textblob import TextBlob
+import nltk
 def get_prompt(word_list, anchor_idx, other_idx):
     # Generate a single command
     new_word_list = word_list.copy()
@@ -6,11 +8,14 @@ def get_prompt(word_list, anchor_idx, other_idx):
     return " ".join(new_word_list)
 
 
-def generate_prompts(sentence, anchor_idx):
+def generate_prompts(sentence, anchor_idx, blob=False):
     # Generate all commands for base_idx
     # sentence is a string of words
     # base_idx is the index of the word to be replaced with [MASK]
-    word_list = sentence.split(" ")
+    if blob:
+        word_list = TextBlob(sentence).words
+    else:
+        word_list = sentence.split(" ")
     commands = []
     for other_idx in range(len(word_list)):
         if other_idx == anchor_idx:
